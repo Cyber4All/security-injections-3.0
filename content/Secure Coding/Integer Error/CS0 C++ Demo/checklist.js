@@ -7,7 +7,8 @@ $(document).ready(function() {
 	var clicked = [];
 	// track which spans are needed for current question
 	var waitingOn = [];
-	console.log("This is a sample module");
+
+
 	/**
 	 * returns the id of the next question, and rearranges class indicators
 	 * if question is not provided, initialize the first question

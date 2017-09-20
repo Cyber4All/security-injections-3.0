@@ -32,23 +32,21 @@ textarea {
 
 
 .feedback{
-position:fixed;
-max-width: 38.46px;
-max-height: 125px;
-min-width: 1px;
-min-height: 1px;
-width:100%;
-height: auto;
-right:-5px;
-top:40%;
-padding:0px 5px 5px 0px;
+	position:fixed;
+	max-width: 38.46px;
+	max-height: 125px;
+	min-width: 1px;
+	min-height: 1px;
+	width:100%;
+	height: auto;
+	right:-5px;
+	top:40%;
+	padding:0px 5px 5px 0px;
 }
 
-.feedback img{width:100%;height:auto;}​
-
-
-
-
+.feedback img{
+	width:100%;height:auto;
+}​
 
 
 /* For bootstrap since relies on empty hrefs */
@@ -65,11 +63,11 @@ padding:0px 5px 5px 0px;
 }
 
 [type="checkbox"]:checked + label:after {
-  content: '✔';
-  font-size: 35px;
-  /*color: #09ad7e;*/
-	color: forestgreen;
-  transition: all .2s;
+	  content: '✔';
+	  font-size: 35px;
+	  /*color: #09ad7e;*/
+		color: forestgreen;
+	  transition: all .2s;
 }
 
 .popover {

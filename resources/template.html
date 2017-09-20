@@ -58,12 +58,7 @@
 					<p ng-if = "module.objectives.outcomes != ''" ng-repeat = "outcomes in module.objectives.outcomes" ng-bind-html = "' - ' + outcomes"></p>
 					<p ng-if = "module.objectives.outcomes == ''">None given</p>
 					</div>
-				<div ng-if = "module.objectives.goals != ''&& module.objectives.outcomes != ''"class = "col-sm-6">
-					<h3>Cover Page</h3>
-					<div id="coverPage" style="">
-							<iframe width="auto" height="500" ng-src="{{coverPageFrame}}"></iframe>
-					</div>
-				</div>
+			
 			</div>
 		</div>
 	</div>

@@ -14,7 +14,6 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 	 * PARAMETERS: content - object containing all content for module
 	 */
 	function initModule(content) {
-
 		$scope.module = content;
 		$scope.module.sections.push({header:"Final Page"});		// section for completion page
 		if(content.hasOwnProperty('objectives')){
@@ -118,7 +117,7 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 			$scope.redirectCookie = function(){
 					var progressCookie = $cookies.get(moduleCookie + 'progress');
 					$scope.sectionscompleted = parseInt(progressCookie);
-					$scope.currentsectionIndex = $scope.sectionscompleted;
+					//$scope.currentsectionIndex = $scope.sectionscompleted;
 					$scope.currentsection = $scope.module.sections[$scope.currentsectionIndex];
 			}
 
@@ -126,12 +125,27 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 			function getCookies(){
 				moduleCookie = $scope.module.name + "-" + $scope.module.variant + "-";
 
+				$cookies.put(moduleCookie + 'progress', 6, {'expires': 0});
+
 				if($cookies.get(moduleCookie + 'progress')!= null){
 					$scope.redirectCookie();
 				}
+				$cookies.putObject(moduleCookie + 'forms',[]);
+				var answers = $cookies.getObject(moduleCookie + 'forms');
+				answers.push({prompt: "Declaring a variable as type integer:", answer: "fixed"},
+				{prompt: "An integer error in C++ causes:", answer: "unexpected"},
+				{prompt: ["bounds", "float", "check"], answer: [true, false, true]},
+				{prompt: "Look at the output. What is the largest possible value of type <strong>int</strong> the program can handle?", answer: "1"},
+				{prompt: "Enter 1000000 (1 million): did you get an error?", answer: "n"},
+				{prompt: "Enter 2000000000 (2 billion): did you get an error?", answer: "y"},
+				{prompt: "Enter 10000000000 (10 billion): did you get an error?", answer: "y"},
+				{prompt: ["plus", "minus", "times"], answer: [true, true, true]},
+				{prompt: "Which of the operations listed in the previous question is most likely to cause an integer error?", answer: "times"}
+			);
+
+				$cookies.putObject(moduleCookie + 'forms',answers);
 
 				cookieAnswer = $cookies.getObject(moduleCookie + 'forms');
-				console.log(cookieAnswer);
 				n = 0;
 				if(typeof(cookieAnswer)==='undefined'){
 					console.log("No cookies to be loaded");
@@ -217,6 +231,44 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 				}
 			}
 		}
+
+
+		$cookies.putObject(moduleCookie + 'texts',[]);
+		var text = $cookies.getObject(moduleCookie + 'texts');
+		text.push(
+		{prompt: "What is the largest possible value of type int? Explain your answer using the information you read in the background section.", answer: "Most modern programming languages have multiple integer data types, including: short, long, and int. The largest possible value for an variable of type int is 2,147,483,647, while the smallest possible value is -2,147,483,647."},
+		{prompt: "What happens when the result of an operation on values of type int exceeds this value ? Explain.", answer: "If the value stored in a variable of type int exceeds the largest possible value given above, then integer error can occur. Integer error can lead to many problems like: corruption of data, incorrect behavior, and even program crashes."},
+		{prompt: "Look up the population of the United States:", answer: "323.1 million (United States Census Bureau, 2016)"},
+		{prompt: "Look up the population of the world:", answer: "7.4 billion (United States Census Bureau, 2017)"},
+		{prompt: "Look up the United States's national debt:", answer: "19.8 trillion (Bureau of Economic Analysis, 2016)"},
+		{prompt: "For which of these would the int data type be a problem: population of the US, population of the world or US national debt?", answer: "Population of the US could be represented as an int data type without issue. However, both the population of the world (7.4 billion) as well as the US national debt (19.8 trillion) are far larger that the largest possible value that can be stored in an integer. If these values must be stored, they should be stored in another data type like a 'long.'"},
+		{prompt: "Discuss the Comair problem described in the background section. What are the repercussions of such a problem?", answer: "The Comair problem was a result of integer error that occurred due to an increase in crew reassignments. Due to the increase, a variable exceeded the maximum amount the data type was capable of. Their entire system crashed causing more than 1,000 flights to be delayed or canceled. A problem of this magnitude has widespread repercussions when it involves a service that affects thousands of individuals. Using the incorrect data type for a system (in this case a 16 bit integer value), can have substantial effects on the company and the individuals who rely on a product."})
+		$cookies.putObject(moduleCookie + 'texts',text);
+
+		cookieAnswer = $cookies.getObject(moduleCookie + 'texts');
+		n = 0;
+		if(typeof(cookieAnswer)==='undefined'){
+			console.log("No cookies to be loaded");
+		}
+		else{
+		for (i in $scope.module.sections) {
+			for (q in $scope.module.sections[i].units){
+					unit = $scope.module.sections[i].units[q];
+				if(unit.type == "question") {
+					switch(unit.mode) {
+						case "textarea":
+						if(cookieAnswer[n]!=null && cookieAnswer[n].prompt == unit.prompt){
+							unit.value = cookieAnswer[n].answer;
+							n++;
+							}
+							break;
+						}
+					}
+		}
+		}
+		}
+
+
 	}
 
 	/*
@@ -228,13 +280,13 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 	 *
 	 */
 	 $scope.saveCookie = function (completed) {
-		
+
 
 
 
 		 var today = new Date();
 		 var expireTime = new Date(today);
-		 expireTime.setMinutes(today.getMinutes() + 120);//expires in 5 hours
+		 expireTime.setMinutes(today.getMinutes() + 120);//expires in 2 hours
 
 		 $cookies.put(moduleCookie + 'progress', completed, {'expires': expireTime});
 		 $cookies.putObject(moduleCookie + 'forms',[]);
@@ -245,7 +297,6 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 
 						switch(unit.mode) {
 							case "radio":
-
 								var answers = $cookies.getObject(moduleCookie + 'forms');
 								answers.push({prompt:unit.prompt, answer:unit.value});
 								$cookies.putObject(moduleCookie + 'forms',answers);
@@ -279,6 +330,7 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 						answers.push({Asset:unit.asset, Threat: unit.threat,Vulnerabilities:unit.vulnerabilities,Probability:unit.probability,Harm:unit.harm,Risk:unit.risk,Mitigation:unit.mitigation});
 						$cookies.putObject(moduleCookie + 'forms',answers);
 					}
+
 
 
 					else if(unit.type == "checklist") {
@@ -316,8 +368,8 @@ app.controller("modCtrl", ["$scope", "$http", "$cookies", "$sce", function($scop
 		 }
 		}
  }
- 
- 
+
+
 }
 
 	/**
@@ -469,6 +521,7 @@ $scope.checkAnswers = function() {
 		}
  		return needChecked;
  }
+
 	$scope.gotoSection = function(i) {
 		if(i <= $scope.sectionscompleted) {
 			$scope.currentsectionIndex = i;
@@ -681,6 +734,10 @@ app.controller('ContactController', ["$scope", "$http", function ($scope, $http,
 			e.preventDefault();
 			$scope.formData.moduleTitle = $('#moduleTitle').text();
 			$scope.formData.url = window.location.href;
+			$scope.formData.timeStamp = new Date().toLocaleString();
+			$scope.formData.appVersion = window.navigator.appVersion;
+			$scope.formData.userAgent = window.navigator.userAgent;
+			$scope.formData.cookieEnabled = window.navigator.cookieEnabled;
 			//console.log($scope.formData);
 
       $scope.submitted = true;
