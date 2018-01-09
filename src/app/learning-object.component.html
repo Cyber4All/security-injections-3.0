@@ -1,0 +1,20 @@
+
+    <div class="jumbotron">
+        <div class="row">
+            <h2 [innerHTML]="currentsection.header" class="col-sm-12"></h2>
+            <div class="col-sm-6">
+                <h3>Learning Goals</h3>
+                <p *ngFor="let goals of module.objectives.goals" [innerHTML]="' - ' + goals"></p>
+                <p *ngIf="module.objectives.goals === undefined">None given</p>
+                <h3>Learning Outcomes</h3>
+                <p *ngFor="let outcomes of module.objectives.outcomes" [innerHTML]="' - ' + outcomes"></p>
+                <p *ngIf="module.objectives.outcomes === undefined">None given</p>
+            </div>
+            <div *ngIf="module.objectives.goals != undefined && module.objectives.outcomes != undefined" class="col-sm-6">
+                <h3>Cover Page</h3>
+                <!--<div id="coverPage">
+              <iframe width="500" height="500" src="{{coverPageFrame}}"></iframe>
+            </div>-->
+            </div>
+        </div>
+    </div>

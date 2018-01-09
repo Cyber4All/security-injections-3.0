@@ -1,0 +1,45 @@
+
+    <div class="jumbotron">
+        <div class="row">
+            <h2 [innerHTML]="currentsection.header" class="col-sm-12"></h2>
+            <div class="col-sm-6">
+                <div class="well">
+                    <div class="si-certificate-form">
+                        <h5>Congratulations! You have completed the {{ module.variant }} {{ module.name }} module!</h5>
+                        <p>Complete this form to generate your certificate</p>
+                        <form (ngSubmit)="generateCertificate()">
+                            <div class="input-group">
+                                <span class="input-group-addon">Full Name</span>
+                                <input [(ngModel)]="form.name" required type="text" class="form-control" name="name">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">Email Address</span>
+                                <input [(ngModel)]="form.email" required type="email" class="form-control" name="email">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">Instructor</span>
+                                <input [(ngModel)]="form.instructor" required type="text" class="form-control" name="instructor">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">Institution</span>
+                                <input [(ngModel)]="form.institution" required type="text" class="form-control" name="institution">
+                            </div>
+                            <br>
+                            <input class="btn btn-success btn-lg" type="submit" value="Generate Certificate">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div id="si-certificate-pane" style="display:none">
+                    <!--<iframe width="500" height="348" src="{{detailFrame}}"></iframe>-->
+                    <a class="btn btn-info btn-md" id="si-certificate-link" download="certificate.pdf">Download
+                        <span class="glyphicon glyphicon-download-alt"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>

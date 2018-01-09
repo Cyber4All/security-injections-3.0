@@ -1,0 +1,204 @@
+/* TODO: Everything.
+ 		See "template.html" or "../design/HTML Schema.txt" to see all the things that need styling.
+
+ 		[What is currently present is only for demo purposes.]
+*/
+html {
+	position: relative;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+	/*margin-top: 80px;*/
+	background-color: whitesmoke;
+	margin-top:40px;
+	padding-bottom: 120px;
+}
+
+textarea {
+   resize: none;
+}
+
+
+
+.feedback{
+position:fixed;
+width:38.46px;
+height:125px;
+right:-5px;
+top:40%;
+padding:0px 5px 5px 0px;
+}
+
+.feedback img{width:100%;height:auto;}​
+
+
+
+
+
+
+/* For bootstrap since relies on empty hrefs */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+
+#checkMark {
+  position: relative;
+}
+#checkMark label{
+  position: absolute;
+	top: -12;
+	left: -5;
+}
+
+[type="checkbox"]:checked + label:after {
+  content: '✔';
+  font-size: 30px;
+  color: #09ad7e;
+  transition: all .2s;
+}
+
+.popover {
+    position:absolute;
+		text-align: center;
+    display:none;
+    background-color:#fff;
+    border: 1px solid #999;
+    padding: 10px;
+    width:auto;
+
+}
+.popover:after, .popover:before {
+    right: 100%;
+    border: solid transparent;
+    content:" ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.popover:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #ffffff;
+    border-width: 10px;
+    top: 50%;
+    margin-top: -10px;
+}
+.popover:before {
+    border-color: rgba(201, 201, 201, 0);
+    border-right-color: #c9c9c9;
+    border-width: 10px;
+    top: 50%;
+    margin-top: -10px;
+}
+
+.header{
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 40px;
+	/*background-color: #464646;*/
+}
+.header-text{
+	font-family: "Sabon";
+	/*color: whitesmoke;*/
+	text-align: left;
+}
+.header-image {
+    width:auto; /* you can use % */
+    height: 20px;
+		float: right;
+}
+.page-header{
+	border-bottom: 5px solid #337ab7;
+}
+.footer{
+	margin: 0 auto !important;
+	text-align: center !important;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: #464646;
+}
+.footer-text{
+	color: whitesmoke;
+	text-align: center;
+}
+
+.navbar{
+	margin-bottom: 0px;
+	background-color:silver;
+}
+
+.nav-tabs li  a {
+		color: #555;
+    height: 50px;
+}
+.nav > li.disabled > a {
+  color: #9999;
+}
+.nav-tabs > li.active > a{
+  color: #337ab7;
+}
+.container{
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+.jumbotron{
+    background-color: white;
+		padding: 5px;
+		box-shadow: 0 8px 16px -6px black;
+}
+.well{
+
+}
+
+.nav-tabs{
+	margin-bottom: 0px;
+}
+.borderless td, .borderless th {
+    border: none !important;
+}
+
+
+.si-question-correct .well{
+	background-color: lightgreen;
+}
+
+.si-question-incorrect .well{
+	background-color: lightpink;
+}
+/*
+.si-checkbox-label-correct::before {
+	color: forestgreen;
+	content: "V ";
+	text-decoration: none;
+}*/
+
+.si-checkbox-label-incorrect::before {
+	color: maroon;
+	content: "X ";
+}
+
+.si-checklist-correct .well{
+	background-color: lightgreen;
+}
+
+.si-checklist-incorrect .well{
+	background-color: lightpink;
+}
+
+.si-checklist-active {
+	font-size: 1.6em;
+}
+
+.si-code-clicked {
+	font-weight: bold;
+	font-style: italic;
+}
+
+.si-code-vulnerability {
+	background-color: yellow;
+}

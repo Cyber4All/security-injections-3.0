@@ -1,0 +1,39 @@
+<header class="header">
+  <div class="container">
+    <div class="col-sm-10">
+      <h1 class="header-text">
+
+      </h1>
+    </div>
+    <div class="col-sm-2">
+      <img src="https://www.towson.edu/universitymarketing/images/logos/towsonu-logo.png" class="img-responsive" style="vertical-align:middle;"
+      />
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div *ngIf="doneLoading">
+    
+    <!-- workflow -->
+    <div class="page-header">
+      <h1>{{ module.name }} - {{ module.variant }}</h1>
+    </div>
+    
+  
+
+    <!-- cover page -->
+    <div *ngIf="currentsection.header=='Learning Objectives'">
+      <learning-object [module]="module" [currentsection]="currentsection"></learning-object>
+    </div>
+    <!-- section content -->
+      <security-injection [module] = "module" [sectionscompleted]="sectionscompleted" [currentsection]="currentsection" [currentsectionIndex]= "currentsectionIndex"></security-injection>
+  </div>
+
+<!--feedback modal -->
+<feedback></feedback>
+
+<!-- certificate page -->
+  <div *ngIf="currentsectionIndex == module.sections.length-1 || currentsection.header=='Final Page'" class="si-finished">
+    <certificate [module]="module"></certificate>
+  </div>
+</div>

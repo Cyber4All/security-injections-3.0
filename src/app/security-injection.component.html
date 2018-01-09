@@ -1,0 +1,211 @@
+<div class="container-fluid">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs nav-justified">
+            <li *ngFor="let section of module.sections; let i = index" [ngClass]="{'active': i <= sectionscompleted && i==currentsectionIndex, 'disabled': i > sectionscompleted}"
+                (click)="i <= sectionscompleted && gotoSection(i); ">
+                <a>{{section.header}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div *ngIf="(currentsectionIndex < module.sections.length-1) && currentsection.header!='Learning Objectives'" class="si-content">
+  <div class="jumbotron">
+        <div class="row">
+            <h2 [innerHTML]="currentsection.header" class="col-sm-12"></h2>
+            <div *ngFor="let unit of currentsection.units" [ngSwitch]="unit.type">
+
+                <h3 *ngSwitchCase="'subheader'" [innerHTML]="unit.text" class="col-sm-12"></h3>
+                <p *ngSwitchCase="'paragraph'" [innerHTML]="unit.text" class="col-sm-12"></p>
+                <div *ngSwitchCase="'list'" class="si-list col-sm-12">
+                    <ol *ngIf="unit.ordered">
+                        <li *ngFor="let text of unit.items" [innerHTML]="text"></li>
+                    </ol>
+                    <ul *ngIf="!unit.ordered">
+                        <li *ngFor="let text of unit.items" [innerHTML]="text"></li>
+                    </ul>
+                </div>
+                <pre *ngSwitchCase="'codeblock'">{{ unit.code }}</pre>
+
+                <div *ngSwitchCase="'image'" class="col-sm-12">
+                    <img src="{{ unit.src }}" alt="{{ unit.alt }}" [ngStyle]="{ 'width': unit.width, 'height': unit.height, 'float': unit.float, 'align': unit.align }"
+                        class="img-responsive">
+                </div>
+                <div *ngSwitchCase="'video'" class="col-sm-12 embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{trustSrc(unit.url)}}"></iframe>
+                </div>
+                <small class="col-sm-12" *ngSwitchCase="'author'" [innerHTML]="'Created by: ' + unit.name"></small>
+                <small class="col-sm-12" *ngSwitchCase="'attribution'" [innerHTML]="unit.copyright+' ('+unit.date+')'"></small>
+
+                <div *ngSwitchCase="'table'" class="col-sm-8">
+                    <table class="table">
+                        <tr>
+                            <th *ngFor="let items of unit.headers" [innerHTML]="items"></th>
+                        </tr>
+                        <tr *ngFor="let items of unit.cells">
+                            <td [innerHTML]="items.first"></td>
+                            <td [innerHTML]="items.second"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div *ngSwitchCase="'chart'" class="table table-bordered" style="width: auto">
+                    <table class="table">
+                        <thead>
+                            <td *ngFor="let items of unit.headers" [innerHTML]="items"></td>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Asset</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <input type="text" style="width: 15em"> </td>
+                            </tr>
+                            <tr>
+                                <td>Threat</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <input type="text" style="width: 15em">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vulnerabilities</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <textarea style="height:6em; width:15em"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Probability</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <input id="prob_1" type="number" min="0" max="3" style="width:15em;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Harm</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <input id="harm_1" type="number" min="0" max="3" style="width:15em;"> </td>
+                            </tr>
+                            <tr>
+                                <td>Risk</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <select style="width:15em;">
+                                        <option></option>
+                                        <option>LOW</option>
+                                        <option>MED</option>
+                                        <option>HI</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mitigation</td>
+                                <td *ngFor="let items of unit.headers">
+                                    <textarea style="height:6em; width:15em"></textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div *ngSwitchCase="'question'" class="col-sm-12 si-question" id="{{ unit.id }}">
+                    <div class="well">
+                        <h5 [innerHTML]="unit.prompt"></h5>
+                        <div [ngSwitch]="unit.mode">
+                            <div *ngFor="let choice of unit.choices" [ngClass]="{'si-radio-choice': unit.mode == 'radio', 'si-checkbox-choice': unit.mode == 'checkbox'}">
+                                <label *ngSwitchCase="'radio'">
+                                    <input type="radio" [(ngModel)]="unit.value" value="{{ choice.id }}" name="{{ unit.id }}" id="{{ unit.id+'-'+choice.id }}">
+                                    <span [innerHTML]="choice.text" ng-checked="unit.checked" id="{{ unit.id+'-'+choice.id }}-label"></span>
+                                </label>
+                                <label *ngSwitchCase="'checkbox'">
+                                    <input type="checkbox" class="si-checkbox" [checked]="choice.value" (change)="$event.target.checked? (choice.value = true) : (choice.value = false)"
+                                        name="{{ unit.id }}" id="{{ unit.id+'-'+choice.id }}">
+                                    <span [innerHTML]="choice.text" id="{{ unit.id+'-'+choice.id }}-label"></span>
+                                </label>
+                            </div>
+
+
+                            <textarea class="form-control" rows="5" *ngSwitchCase="'textarea'" [(ngModel)]="unit.value"></textarea>
+                        </div>
+                        <p class="si-error" *ngSwitchDefault>Mode invalid</p>
+                    </div>
+                </div>
+
+
+                <div *ngSwitchCase="'checklist'" class="si-checklist" id="{{ unit.id }}">
+                    <div class="col-sm-5">
+                        <div class="well">
+                            <table class="table" *ngFor="let group of unit.list" id="{{ unit.id+'-'+group.id }}">
+                                <tr>
+                                    <th colspan="2" [innerHTML]="group.header"></th>
+                                </tr>
+                                <tr *ngFor="let item of group.items">
+                                    <td class="si-checklist-label-cell">
+                                        <span id="{{ unit.id+'-'+group.id+'-'+item.id }}-label" [innerHTML]="item.text"></span>
+                                    </td>
+                                    <td style="vertical-align: middle;" *ngIf="item.js" class="si-checklist-box-cell">
+                                        <div id="checkMark">
+                                            <input type="checkbox" [checked] [(ngModel)]="item.value" name="{{ unit.id+'-'+group.id }}" class="si-checkbox" id="{{ unit.id+'-'+group.id+'-'+item.id }}"
+                                                disabled>
+                                            <label for="{{ unit.id+'-'+group.id+'-'+item.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td style="vertical-align: middle;" *ngIf="!item.js" class="si-checklist-box-cell">
+                                        <div id="checkMark">
+                                            <input type="checkbox" [checked] [(ngModel)]="item.value" name="{{ unit.id+'-'+group.id }}" class="si-checkbox" id="{{ unit.id+'-'+group.id+'-'+item.id }}">
+                                            <label for="{{ unit.id+'-'+group.id+'-'+item.id }}"></label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 checklist-block" style="position:relative;">
+                        <pre *ngIf="unit.code" class="si-checklist-code" [innerHTML]="unit.code"></pre>
+                        <script *ngIf="unit.javascript" ng-bind="unit.javascript"></script>
+                        <div class="popover radiopop" style="position:absolute;">
+                            <label name="popPrompt" text=" "></label>
+                            <form>
+                                <input type="radio" name="popOpt" value="Yes" />&nbsp;Yes&nbsp;
+                                <input type="radio" name="popOpt" value="No" />&nbsp;No&nbsp;
+                                <input type="button" name="popSave" class="btn-md" value="Check" />
+                            </form>
+                        </div>
+                        <div class="popover rangepop" style="position:absolute;">
+                            <form>
+                                <input type="textarea" id="lowInt" style="width: 24px" />
+                                <select id="popSelect1">
+                                    <option value="<"></option>&lt;
+                                    <option value="<="></option>&lt;=
+                                    <option value="="></option>=
+                                    <option value=">="></option>&gt;=
+                                    <option value=">"></option>&gt;
+                                </select>&nbsp;i&nbsp;
+                                <select id="popSelect2">
+                                    <option value="<"></option>&lt;
+                                    <option value="<="></option>&lt;=
+                                    <option value="="></option>=
+                                    <option value=">="></option>&gt;=
+                                    <option value=">"></option>&gt;
+                                </select>
+                                <input type="textarea" id="highInt" style="width: 24px" />
+                                <input type="button" name="popSave2" class="btn-md" value="Check" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="si-error" *ngSwitchDefault>Type invalid</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- buttons -->
+    <button class="btn btn-primary btn-md" *ngIf="checkButtons(currentsectionIndex)" id="btn-check-answers" (click)="checkAnswers()">Check Answers
+        <span class="glyphicon glyphicon-ok"></span>
+    </button>
+    <button class="btn btn-success btn-md" *ngIf="currentsectionIndex < sectionscompleted" (click)="gotoSection(currentsectionIndex+1)">Next Section
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </button>
+    <button class="btn btn-default btn-md" *ngIf="currentsectionIndex >=  sectionscompleted" disabled>Next Section
+        <span class="glyphicon glyphicon-ban-circle"></span>
+    </button>
+</div>
